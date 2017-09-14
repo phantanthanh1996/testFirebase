@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Plugin.Badge;
 using Plugin.FirebasePushNotification;
 using Xamarin.Forms;
 
@@ -13,7 +14,7 @@ namespace Firebase
         public MainPage()
         {
             InitializeComponent();
-
+            
 
             CrossFirebasePushNotification.Current.OnNotificationReceived += (s, p) =>
             {

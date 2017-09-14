@@ -10,11 +10,13 @@ using Firebase;
 using Plugin.FirebasePushNotification.Abstractions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Plugin.Badge;
 
 namespace Firebase.Droid
 {
     [Application]
     class MainApplication : Application, Application.IActivityLifecycleCallbacks
+
     {
 
         public MainApplication(IntPtr handle, JniHandleOwnership transer) : base(handle, transer)
@@ -25,7 +27,8 @@ namespace Firebase.Droid
         {
             base.OnCreate();
             RegisterActivityLifecycleCallbacks(this);
-
+            var count = 0;
+           // CrossBadge.Current.SetBadge(count);
             //If debug you should reset the token each time.
 #if DEBUG
             FirebasePushNotificationManager.Initialize(this, new NotificationUserCategory[]
@@ -63,9 +66,17 @@ namespace Firebase.Droid
             CrossFirebasePushNotification.Current.OnNotificationReceived += (s, p) =>
             {
                 System.Diagnostics.Debug.WriteLine("NOTIFICATION RECEIVED", p.Data);
+                count++;
+                CrossBadge.Current.SetBadge(count);
 
             };
+            CrossFirebasePushNotification.Current.OnNotificationOpened += (s, p) =>
+            {
+                count--;
+                CrossBadge.Current.SetBadge(count);
+            };
         }
+
         public override void OnTerminate()
         {
             base.OnTerminate();
@@ -75,6 +86,7 @@ namespace Firebase.Droid
         public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
         {
             CrossCurrentActivity.Current.Activity = activity;
+            CrossBadge.Current.ClearBadge();
         }
 
         public void OnActivityDestroyed(Activity activity)

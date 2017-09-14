@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Plugin.Badge;
 using Plugin.FirebasePushNotification;
 using Xamarin.Forms;
 
@@ -26,6 +27,7 @@ namespace Firebase
             CrossFirebasePushNotification.Current.OnTokenRefresh += (s, p) =>
             {
                 System.Diagnostics.Debug.WriteLine($"TOKEN REC: {p.Token}");
+                CrossBadge.Current.ClearBadge();
             };
             System.Diagnostics.Debug.WriteLine($"TOKEN: {CrossFirebasePushNotification.Current.Token}");
         }
@@ -37,6 +39,7 @@ namespace Firebase
 
         protected override void OnResume()
         {
+            //CrossBadge.Current.ClearBadge();
             // Handle when your app resumes
         }
     }
